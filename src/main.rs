@@ -38,25 +38,31 @@ impl eframe::App for TodoApp{
             ui.add_space(10.0);
             let work_running = self.button_click%2 == 1;
             let mut display_time = 0;
+            let mut progress = 1.0;
             if self.running{
                 if let Some(start) = self.start{
                     if work_running{
                         display_time = start.elapsed().as_secs();
+
+                        progress = 1.0;
                     }else{
                         let break_length = self.work_time/5;
                         if start.elapsed().as_secs() >= break_length{
                             display_time = 0;
+                            progress = 0.0;
                             self.running = false;
                             self.work_time = 0;
                             self.button_click += 1;
                         }else{
                             display_time = break_length - start.elapsed().as_secs();
                             self.break_time = display_time;
+                            progress = display_time as f32 / break_length as f32;
                         }
                     }
                 }
             }
             ui.label(format!("{display_time} seconds"));
+            ui.add(egui::ProgressBar::new(progress).text(format!("{display_time} seconds")));
             ui.horizontal(|ui|{
                 if ui.button(if self.running{"Break"} else {"Start"}).clicked(){
                     if self.running && work_running{

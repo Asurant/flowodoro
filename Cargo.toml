@@ -2,6 +2,8 @@
 name = "flowodoro"
 version = "0.1.0"
 edition = "2024"
+description = "A ToDo List + Flowodoro app allowing for you to calculate work and break times."
+license = "MIT"
 
 [dependencies]
 eframe = "0.33.3"
